@@ -17,15 +17,22 @@ library(here)
 
 ```{r}
 # Read in data
+
+# 1985/01/01 - 1994/01/01
 weather_1985_1994 <- read_csv(here('data/85-94.csv')) %>% # Read in csv
   janitor::clean_names() %>% # convert column names to lower snake case
   select(station, date, hourly_precipitation) %>% # select only columns we are interested in
   filter(!is.na(hourly_precipitation)) # drop any na's in the precipitation column
 
+# 2014/01/01 - 2023/12/31
 weather_2014_2023 <- read_csv(here('data/14-23.csv')) %>%
   janitor::clean_names() %>%
   select(station, date, hourly_precipitation) %>%
   filter(!is.na(hourly_precipitation))
+```
+
+```{r}
+typeof(weather_1985_1994$date)
 ```
 
 ```{r}
@@ -34,11 +41,16 @@ ggplot(weather_1985_1994, aes(date, hourly_precipitation)) +
   geom_point()
 ```
 
-
 ```{r}
 # Aggregate data to get daily precipitation
 daily_avg_1985_1994 <- weather_1985_1994 %>%
-  group_by(day(date)) %>%
+  mutate(date = as.Date(date)) %>%
+  group_by(date) %>%
   summarize(daily_avg_precip = mean(hourly_precipitation))
+```
+
+```{r}
+ggplot(daily_avg_1985_1994, aes(date, daily_avg_precip)) +
+  geom_point()
 ```
 
