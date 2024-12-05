@@ -29,7 +29,16 @@ weather_2014_2023 <- read_csv(here('data/14-23.csv')) %>%
 ```
 
 ```{r}
-# Aggregate data to get daily precipitation
+# First preliminary plot of 85 to 94 data
+ggplot(weather_1985_1994, aes(date, hourly_precipitation)) +
+  geom_point()
+```
 
+
+```{r}
+# Aggregate data to get daily precipitation
+daily_avg_1985_1994 <- weather_1985_1994 %>%
+  group_by(day(date)) %>%
+  summarize(daily_avg_precip = mean(hourly_precipitation))
 ```
 
