@@ -1,0 +1,35 @@
+---
+title: "EDS 222: Final Project"
+author: "Liz Peterson"
+format: html
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+# Load required packages
+library(tidyverse)
+library(here)
+library(ggplot2)
+library(here)
+```
+
+
+```{r}
+# Read in data
+weather_1985_1994 <- read_csv(here('data/85-94.csv')) %>% # Read in csv
+  janitor::clean_names() %>% # convert column names to lower snake case
+  select(station, date, hourly_precipitation) %>% # select only columns we are interested in
+  filter(!is.na(hourly_precipitation)) # drop any na's in the precipitation column
+
+weather_2014_2023 <- read_csv(here('data/14-23.csv')) %>%
+  janitor::clean_names() %>%
+  select(station, date, hourly_precipitation) %>%
+  filter(!is.na(hourly_precipitation))
+```
+
+```{r}
+# Aggregate data to get daily precipitation
+
+```
+
