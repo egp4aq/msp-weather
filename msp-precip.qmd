@@ -24,6 +24,18 @@ weather_1985_1994 <- read_csv(here('data/85-94.csv')) %>% # Read in csv
   select(station, date, hourly_precipitation) %>% # select only columns we are interested in
   filter(!is.na(hourly_precipitation)) # drop any na's in the precipitation column
 
+# 1994/01/02 - 2003/12/31
+weather_1994_2003 <- read_csv(here('data/94-03.csv')) %>%
+  janitor::clean_names() %>%
+  select(station, date, hourly_precipitation) %>%
+  filter(!is.na(hourly_precipitation))
+
+# 2004/01/01 - 2013/12/31
+weather_2004_2014 <- read_csv(here('data/04-14.csv')) %>%
+  janitor::clean_names() %>%
+  select(station, date, hourly_precipitation) %>%
+  filter(!is.na(hourly_precipitation))
+
 # 2014/01/01 - 2023/12/31
 weather_2014_2023 <- read_csv(here('data/14-23.csv')) %>%
   janitor::clean_names() %>%
