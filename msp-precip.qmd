@@ -12,6 +12,7 @@ library(tidyverse)
 library(here)
 library(ggplot2)
 library(here)
+library(hockeystick)
 ```
 
 
@@ -103,4 +104,48 @@ ggplot(monthly_avg_combined, aes(x = year_month, y = monthly_avg_precip, color =
         axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
+
+### Testing for a trend over time
+```{r}
+# Fit a linear regression model to test if there is a significant trend over time
+linear_model <- lm(monthly_avg_precip ~ year_month, data = monthly_avg_combined)
+
+# View the summary of the model
+summary(linear_model)
+
+```
+
+```{r}
+# Add the fitted line to the plot
+ggplot(monthly_avg_combined, aes(x = year_month, y = monthly_avg_precip)) +
+  geom_point() +  # Scatter plot of the data
+  geom_smooth(method = "lm", aes()) +  # Linear model line
+  labs(
+    title = "Monthly Average Precipitation with Trend",
+    x = "Date",
+    y = "Monthly Average Precipitation (mm)",
+    color = "Period"
+  ) +
+  theme_minimal()
+
+```
+
+### Use hockeystick data for emissions
+```{r}
+emissions <- get_emissions()
+```
+
+```{r}
+us_emissions <- emissions %>%
+  filter(country == "United States") %>%
+  filter(year >= 1985 & year <= 2023)
+```
+
+```{r}
+ggplot(us_emissions, aes(x = year, y = co2)) +
+  geom_line()
+```
+
+
+
 
