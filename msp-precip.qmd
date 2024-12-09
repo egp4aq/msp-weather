@@ -66,3 +66,45 @@ ggplot(daily_avg_1985_1994, aes(date, daily_avg_precip)) +
   geom_point()
 ```
 
+```{r}
+# Calculate daily average precipitation for each dataset
+daily_avg_1985_1994 <- weather_1985_1994 %>%
+  mutate(date = as.Date(date)) %>%
+  group_by(date) %>%
+  summarize(daily_avg_precip = mean(hourly_precipitation)) %>%
+  mutate(period = "1985-1994")
+
+daily_avg_1994_2003 <- weather_1994_2003 %>%
+  mutate(date = as.Date(date)) %>%
+  group_by(date) %>%
+  summarize(daily_avg_precip = mean(hourly_precipitation)) %>%
+  mutate(period = "1994-2003")
+
+daily_avg_2004_2014 <- weather_2004_2014 %>%
+  mutate(date = as.Date(date)) %>%
+  group_by(date) %>%
+  summarize(daily_avg_precip = mean(hourly_precipitation)) %>%
+  mutate(period = "2004-2014")
+
+daily_avg_2014_2023 <- weather_2014_2023 %>%
+  mutate(date = as.Date(date)) %>%
+  group_by(date) %>%
+  summarize(daily_avg_precip = mean(hourly_precipitation)) %>%
+  mutate(period = "2014-2023")
+
+# Combine all datasets into one
+combined_data <- bind_rows(daily_avg_1985_1994, daily_avg_1994_2003, daily_avg_2004_2014, daily_avg_2014_2023)
+
+# Plot the combined data
+ggplot(combined_data, aes(x = date, y = daily_avg_precip, color = period)) +
+  geom_line() +
+  labs(
+    title = "Daily Average Precipitation by Period",
+    x = "Date",
+    y = "Daily Average Precipitation (mm)",
+    color = "Period"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
