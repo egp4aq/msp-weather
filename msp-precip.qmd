@@ -6,6 +6,18 @@ editor_options:
   chunk_output_type: console
 ---
 
+## Background
+
+The background for this project revolves around the question of how climate change and the onset of more extreme weather is related to intense storm events. Specifically, I just spent time with family in Minnesota, and was reminded of their experience with the Halloween storm of 1991. This prompted me to think about whether the onset of climate change has increased the occurance of high intensity precipitation events.
+
+## Data 
+
+The precipitation data came from NOAA's National Centers for Environmental Information. They have a maximum requestable data period of 10 years, so I got the data in four separate chunks. 1985/01/01 - 1994/01/01, 1994/01/02 - 2003/12/31, 2004/01/01 - 2013/12/31, and 2014/01/01 - 2023/12/31. The weather station where the data was recorded was the Minneapolis Saint Paul international airport. 
+
+
+## Hypothesis
+
+
 ```{r}
 # Load required packages
 library(tidyverse)
@@ -95,7 +107,10 @@ monthly_avg_combined <- combined_weather_data %>%
 ```
 
 ```{r}
+highlight_date <- as.Date("1991-10-31")
+```
 
+```{r}
 # Plot combined data
 ggplot(monthly_avg_combined, aes(x = year_month, y = monthly_avg_precip, color = period)) +
   geom_line() +
@@ -106,8 +121,8 @@ ggplot(monthly_avg_combined, aes(x = year_month, y = monthly_avg_precip, color =
     color = "Period") +
   theme_minimal() +
   theme(legend.position = "bottom",
-        axis.text.x = element_text(angle = 45, hjust = 1))
-
+        axis.text.x = element_text(angle = 45, hjust = 1)) +
+  geom_vline(aes(xintercept = highlight_date), color = "black", linetype = "dashed", size = 0.3)
 ```
 
 ### Testing for a trend over time
@@ -221,6 +236,4 @@ confint(regression_model)
 ```
 
 when we run our confidence interval for the intercept, we get [-0.008684769, 0.01287229] (for a 2.5%/97.5% split). this means that we can be 97.5% sure that the true intercept falls within that range. More importantly for our co2 variable we get [-1.277878e-06, 2.674409e-06]. This means that we are 97.5% confident that the true slope of the linear regression line for co2 is between that range, which includes zero. this simply further proves taht the slope is not significantly different from zero.
-
-
 
