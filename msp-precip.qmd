@@ -146,6 +146,59 @@ ggplot(us_emissions, aes(x = year, y = co2)) +
   geom_line()
 ```
 
+## REAL ANALYSIS FOR CO2 AND WEATHER
+### Merge precipitation data with CO2 emission data
+```{r}
+#  aggregate the monthly precipitation data to be yearly data so we can merge it with the yearly us emissions data
+yearly_avg_precip <- monthly_avg_combined %>%
+  mutate(year = as.numeric(format(year_month, "%Y"))) %>%
+  group_by(year) %>%
+  summarize(yearly_avg_precip = mean(monthly_avg_precip, na.rm = TRUE))
+```
 
+```{r}
+# merge the us_emissions data and the precipitation data and get rid of the columns we don't need
+precip_emissions <- left_join(yearly_avg_precip, us_emissions, by = "year") %>%
+  select(year, yearly_avg_precip, country, co2)
+```
+
+```{r}
+# create a preliminary plot of the two combined 
+ggplot(precip_emissions, aes(x = year, y = yearly_avg_precip)) +
+  geom_line(color = "blue") +
+  geom_point(aes(y = co2), color = "red") + # Overlay CO2 data
+  labs(
+    title = "Annual CO2 Emissions and Precipitation",
+    x = "Year",
+    y = "Value",
+    caption = "Blue = Precipitation, Red = CO2 Emissions"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
+```
+
+```{r}
+# Fit a linear regression model
+regression_model <- lm(yearly_avg_precip ~ co2, data = precip_emissions)
+summary(regression_model)
+```
+
+```{r}
+# Plot the data with regression line
+ggplot(precip_emissions, aes(x = co2, y = yearly_avg_precip)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(
+    title = "Linear Relationship between CO2 Emissions and Precipitation",
+    x = "CO2 Emissions (million metric tons)",
+    y = "Yearly Average Precipitation (mm)"
+  ) +
+  theme_minimal()
+
+```
 
 
