@@ -167,17 +167,13 @@ precip_emissions <- left_join(yearly_avg_precip, us_emissions, by = "year") %>%
 ggplot(precip_emissions, aes(x = year, y = yearly_avg_precip)) +
   geom_line(color = "blue") +
   geom_point(aes(y = co2), color = "red") + # Overlay CO2 data
-  labs(
-    title = "Annual CO2 Emissions and Precipitation",
+  labs(title = "Annual CO2 Emissions and Precipitation",
     x = "Year",
     y = "Value",
-    caption = "Blue = Precipitation, Red = CO2 Emissions"
-  ) +
+    caption = "Blue = Precipitation, Red = CO2 Emissions") +
   theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    legend.position = "bottom"
-  )
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom")
 
 ```
 
@@ -192,13 +188,34 @@ summary(regression_model)
 ggplot(precip_emissions, aes(x = co2, y = yearly_avg_precip)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE, color = "blue") +
-  labs(
-    title = "Linear Relationship between CO2 Emissions and Precipitation",
+  labs(title = "Linear Relationship between CO2 Emissions and Precipitation",
     x = "CO2 Emissions (million metric tons)",
-    y = "Yearly Average Precipitation (mm)"
-  ) +
+    y = "Yearly Average Precipitation (mm)") +
   theme_minimal()
+``` 
 
+
+## Hypothesis testing
+### Formulate hypotheses
+null hypothesis: H0 = there is no relationship between co2 emissions and precipitation (slope of regression line is 0)
+alternative hypothesis: H1 = three is a significant relationship between co2 emissions and precipitation (slope of regression line is not 0)
+
+to see whether or not we are able to reject the null hypothesis, we will run a linear regression model which will give us coefficients 
+it will give us the slope of the linear regression line, which will determine whether or not we can reject the null hypothesis
+```{r}
+# Fit a linear regression model
+regression_model <- lm(yearly_avg_precip ~ co2, data = precip_emissions)
+summary(regression_model)
 ```
+
+when we run this, we get 0.479 as the p value for the co2 variable. this is much higher than 0.05, which means we cannot reject the null hypothesis. 
+for the full model significance, we have a p value of 0.4785 which is also not statistically significant.
+
+```{r}
+confint(regression_model)
+```
+
+when we run our confidence interval for the intercept, we get [-0.008684769, 0.01287229] (for a 2.5%/97.5% split). this means that we can be 97.5% sure that the true intercept falls within that range. More importantly for our co2 variable we get [-1.277878e-06, 2.674409e-06]. This means that we are 97.5% confident that the true slope of the linear regression line for co2 is between that range, which includes zero. this simply further proves taht the slope is not significantly different from zero.
+
 
 
