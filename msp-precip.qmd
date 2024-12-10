@@ -24,19 +24,26 @@ weather_1985_1994 <- read_csv(here('data/85-94.csv')) %>% # Read in csv
   janitor::clean_names() %>% # convert column names to lower snake case
   select(station, date, hourly_precipitation) %>% # select only columns we are interested in
   mutate(hourly_precipitation = as.numeric(hourly_precipitation))
+```
 
+
+```{r}
 # 1994/01/02 - 2003/12/31
 weather_1994_2003 <- read_csv(here('data/94-03.csv')) %>%
   janitor::clean_names() %>%
   select(station, date, hourly_precipitation) %>%
   mutate(hourly_precipitation = as.numeric(hourly_precipitation))
+```
 
+```{r}
 # 2004/01/01 - 2013/12/31
 weather_2004_2014 <- read_csv(here('data/04-14.csv')) %>%
   janitor::clean_names() %>%
   select(station, date, hourly_precipitation) %>%
   mutate(hourly_precipitation = as.numeric(hourly_precipitation))
+```
 
+```{r}
 # 2014/01/01 - 2023/12/31
 weather_2014_2023 <- read_csv(here('data/14-23.csv')) %>%
   janitor::clean_names() %>%
@@ -93,12 +100,10 @@ monthly_avg_combined <- combined_weather_data %>%
 ggplot(monthly_avg_combined, aes(x = year_month, y = monthly_avg_precip, color = period)) +
   geom_line() +
   scale_x_date(date_labels = "%b %Y", date_breaks = "18 months") +  # Format x-axis labels
-  labs(
-    title = "Monthly Average Precipitation by Period",
+  labs(title = "Monthly Average Precipitation by Period",
     x = "Date",
     y = "Monthly Average Precipitation (mm)",
-    color = "Period"
-  ) +
+    color = "Period") +
   theme_minimal() +
   theme(legend.position = "bottom",
         axis.text.x = element_text(angle = 45, hjust = 1))
@@ -174,7 +179,6 @@ ggplot(precip_emissions, aes(x = year, y = yearly_avg_precip)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position = "bottom")
-
 ```
 
 ```{r}
@@ -198,6 +202,7 @@ ggplot(precip_emissions, aes(x = co2, y = yearly_avg_precip)) +
 ## Hypothesis testing
 ### Formulate hypotheses
 null hypothesis: H0 = there is no relationship between co2 emissions and precipitation (slope of regression line is 0)
+
 alternative hypothesis: H1 = three is a significant relationship between co2 emissions and precipitation (slope of regression line is not 0)
 
 to see whether or not we are able to reject the null hypothesis, we will run a linear regression model which will give us coefficients 
