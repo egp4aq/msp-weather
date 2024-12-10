@@ -8,7 +8,7 @@ editor_options:
 
 ## Background
 
-The background for this project revolves around the question of how climate change and the onset of more extreme weather is related to intense storm events. Specifically, I just spent time with family in Minnesota, and was reminded of their experience with the Halloween storm of 1991. This prompted me to think about whether the onset of climate change has increased the occurence of high intensity precipitation events.
+The background for this project revolves around the question of how climate change and the onset of more extreme weather is related to intense storm events. Specifically, I just spent time with family in Minnesota, and was reminded of their experience with the Halloween storm of 1991. This prompted me to think about whether the onset of climate change has increased the occurrence of high intensity precipitation events.
 
 ## Data 
 
