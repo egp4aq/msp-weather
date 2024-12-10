@@ -8,12 +8,13 @@ editor_options:
 
 ## Background
 
-The background for this project revolves around the question of how climate change and the onset of more extreme weather is related to intense storm events. Specifically, I just spent time with family in Minnesota, and was reminded of their experience with the Halloween storm of 1991. This prompted me to think about whether the onset of climate change has increased the occurance of high intensity precipitation events.
+The background for this project revolves around the question of how climate change and the onset of more extreme weather is related to intense storm events. Specifically, I just spent time with family in Minnesota, and was reminded of their experience with the Halloween storm of 1991. This prompted me to think about whether the onset of climate change has increased the occurence of high intensity precipitation events.
 
 ## Data 
 
 The precipitation data came from NOAA's National Centers for Environmental Information. They have a maximum requestable data period of 10 years, so I got the data in four separate chunks. 1985/01/01 - 1994/01/01, 1994/01/02 - 2003/12/31, 2004/01/01 - 2013/12/31, and 2014/01/01 - 2023/12/31. The weather station where the data was recorded was the Minneapolis Saint Paul international airport. 
 
+The hockeystick data comes from an R package called hockeystick. The package is very robust
 
 ## Hypothesis
 
@@ -25,6 +26,8 @@ library(here)
 library(ggplot2)
 library(here)
 library(hockeystick)
+library(kableExtra)
+library(broom)
 ```
 
 
@@ -225,7 +228,13 @@ it will give us the slope of the linear regression line, which will determine wh
 ```{r}
 # Fit a linear regression model
 regression_model <- lm(yearly_avg_precip ~ co2, data = precip_emissions)
-summary(regression_model)
+results <- tidy(regression_model)
+```
+
+```{r}
+results %>%
+  kable("html", caption = "Regression Model Results") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE)
 ```
 
 when we run this, we get 0.479 as the p value for the co2 variable. this is much higher than 0.05, which means we cannot reject the null hypothesis. 
